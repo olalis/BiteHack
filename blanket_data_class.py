@@ -50,7 +50,11 @@ class BlanketData:
         
 
 while 1:
-    with serial.Serial('/dev/ttyAMA0', 115200) as ser:
+    with serial.Serial('/dev/ttyAMA0', 115200, timeout = 2) as ser:
+        x = ser.read()
+        print(x)
+
+    with serial.Serial('/dev/ttyS0', 115200, timeout = 2) as ser:
         x = ser.read()
         print(x)
 
