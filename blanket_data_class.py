@@ -53,7 +53,7 @@ while 1:
     with serial.Serial('/dev/ttyS0', 9600, timeout = None) as ser:
         try: 
             x = ser.read()
-            print(bytes(int(x)))
+            print(str(x))
         except serial.SerialException:
             pass
 
