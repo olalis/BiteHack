@@ -1,0 +1,2 @@
+token = "XXXXXXXXXXXXXXXX"
+recievers = ["XXXXXX"]
