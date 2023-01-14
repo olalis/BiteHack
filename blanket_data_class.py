@@ -51,6 +51,9 @@ class BlanketData:
 
 while 1:
     with serial.Serial('/dev/ttyS0', 9600, timeout = None) as ser:
-        x = ser.read()
-        print(x)
+        try: 
+            x = ser.read()
+            print(x)
+        except SerialException:
+            pass
 
