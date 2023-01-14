@@ -1,7 +1,7 @@
 
 class BlanketData:
     def __init__(self, data_frame: str) -> None:
-        self.thermometr1: float = 
+        self.thermometr1: float = None
         self.thermometr2: float = None
         self.thermometr3: float = None
         self.barometer: float = None
