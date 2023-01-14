@@ -54,6 +54,6 @@ while 1:
         try: 
             x = ser.read()
             print(x)
-        except SerialException:
+        except serial.SerialException:
             pass
 
