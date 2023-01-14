@@ -1,3 +1,4 @@
+import serial
 
 class BlanketData:
     def __init__(self, data_frame: str) -> None:
@@ -47,4 +48,9 @@ class BlanketData:
             pass
 
         
+
+while 1:
+    with serial.Serial('/dev/ttyS1', 19200, timeout=1) as ser:
+        x = ser.read()
+        print(x)
 
