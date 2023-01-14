@@ -1,20 +1,71 @@
 
 import serial
 import struct
+from scipy.fft import fft, fftfreq
+import numpy as np
+import csv
+from typing import List
+
+class ADCdata:
+    def __init__(self) -> None:
+        self.ADC_data_counter: int = 0 # max 15 cykli
+        self.ADC_data_list: List[float] = []
+        self.pulse: float = None
+
+    def add_new_data(self, new_data: List[float]):
+        if self.ADC_data_counter <= 15:
+            self.ADC_data_list += new_data
+            self.ADC_data_counter += 1
+
+            if self.ADC_data_counter == 15:
+                self.calculate_pulse
+                self.ADC_data_counter = 0
+                self.ADC_data_list = []
+    
+
+    def calculate_pulse(self) -> None:
+        N = len(self.ADC_data_list)
+
+        # sample spacing
+        T = 1.0 / 100
+        x = np.linspace(0.0, N*T, N, endpoint=False)
+
+        yf = fft(self.ADC_data_list)
+        xf = fftfreq(N, T)[:N//2]*6
+
+        new_yf = yf[500:2000]
+        self.pulse = xf[new_yf.argmax(axis=0) + 500]
+
 
 class BlanketData:
-    def __init__(self, blanket_data_list) -> None:
+    def __init__(self) -> None:
         # temp_blanket_data_list: list[float, bool] = self.proces_data(data_frame)
 
+        # self.thermometr1: float = blanket_data_list[0]
+        # self.thermometr2: float = blanket_data_list[1]
+        # self.thermometr3: float = blanket_data_list[2]
+        # self.barometer: float = blanket_data_list[3]
+        # self.air_humidity: float = blanket_data_list[4]
+        # self.help_me_button: bool = blanket_data_list[5]
+        # self.pulse: float = blanket_data_list[5]
+
+        self.thermometr1: float = None
+        self.thermometr2: float = None
+        self.thermometr3: float = None
+        self.barometer: float = None
+        self.air_humidity: float = None
+        self.help_me_button: bool = None
+        self.pulse: ADCdata = ADCdata()
+
+        
+    def update_data(self,blanket_data_list):
         self.thermometr1: float = blanket_data_list[0]
         self.thermometr2: float = blanket_data_list[1]
         self.thermometr3: float = blanket_data_list[2]
         self.barometer: float = blanket_data_list[3]
         self.air_humidity: float = blanket_data_list[4]
-        # self.pulse: float = blanket_data_list[5]
         self.help_me_button: bool = blanket_data_list[5]
-
-        
+        self.pulse.add_new_data(blanket_data_list[6])
 
     def proces_data(frame_data):
         pass
@@ -28,7 +79,8 @@ class BlanketData:
         text += f"Termometr3: {self.thermometr3}\n"
         text += f"Barometr:   {self.barometer}\n"
         text += f"Wilgotność: {self.air_humidity}\n"
-        # text += f"Puls:       {self.pulse}"
+        if self.pulse.pulse is not None:
+            text += f"Puls:       {self.pulse}"
         text += f"HelpMe:     {self.help_me_button}\n"
 
         return text
@@ -60,9 +112,7 @@ class BlanketData:
         if self.pulse >= treshold_pulse:
             pass
 
-class ADCdata:
-    def __init__(self) -> None:
-        pass
+
 
 def processData(val: bytes) -> list:
     # val = b'\xaa\xaa\xaa\xaa\x41\xc2\x66\x66\x41'
@@ -74,7 +124,12 @@ def processData(val: bytes) -> list:
         temp_blanket_data_list.append(struct.unpack('>f', val[19:15:-1])[0]) #Barometr
         temp_blanket_data_list.append(struct.unpack('>f', val[23:19:-1])[0]) #Wilgtnosc
         temp_blanket_data_list.append(struct.unpack('>B', val[24:23:-1])[0]) #helpMe
-        # temp_blanket_data_list.append(struct.unpack('>f', val[25:])[0]) #ADC
+        
+        temp_ADC_data_list = []
+        for i in range(0,1200,4):
+            temp_ADC_data_list.append(struct.unpack('>f', val[28+i:24+1])[0]) #ADC
+        
+        temp_blanket_data_list.append(temp_ADC_data_list)
 
     return temp_blanket_data_list
 
