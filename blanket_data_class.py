@@ -179,14 +179,17 @@ def processData(val: bytes) -> list:
 
     return temp_blanket_data_list
 
-
+print("1")
 bott = Telegram()
 bott.msg_all('Service starting after system restart!\n For help type: /help')
 data = BlanketData(bott)
 
+print("2")
+
 blanket_data_counter = 0
 blanket_data_counter_resetter = 10
 
+print("3")
 #debug_mode = True
 
 while 1:
@@ -196,6 +199,7 @@ while 1:
             print(str(x))
             if x[0:4] == b'\xaa\xaa\xaa\xaa':
                 data.update_data(processData(x))
+                print("4")
                 print(data)
                 data.detect_degner()
                 temp_write_sg = data.get_serial_signal_to_send()
