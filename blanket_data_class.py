@@ -5,6 +5,7 @@ from scipy.fft import fft, fftfreq
 import numpy as np
 import csv
 from typing import List
+import math
 
 from telegram import Telegram
 
@@ -62,6 +63,9 @@ class BlanketData:
 
         self.telebot = telegram_bot
 
+        #####
+        self.hight_above_sea_level: float = None
+
         
     def update_data(self,blanket_data_list):
         self.thermometr1: float = blanket_data_list[0]
@@ -87,11 +91,22 @@ class BlanketData:
         if self.pulse.pulse is not None:
             text += f"Puls:       {self.pulse}"
         text += f"HelpMe:     {self.help_me_button}\n"
+        text += f"========================="
+        test += f"Wysokość:   {self.hight_above_sea_level}\n"
 
         return text
     
     def process_temperature(self):
         pass
+
+    def process_presure(self, data):
+        ACTUAL_TEMP = self.thermometr3 # 27.1
+        ACTUAL_PRES = self.barometer #990.0
+
+        p0 = 1013.25
+        temp = ACTUAL_TEMP + 273.15
+        p = ACTUAL_PRES
+        self.hight_above_sea_level= -29.271769 * temp * math.log(p / p0)
 
 
     def emit_help_me_signal(self):
