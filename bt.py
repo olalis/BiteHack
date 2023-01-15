@@ -3,7 +3,7 @@ from pprint import pprint
 
 devices = discover_devices()
 for dev in devices:
-    print(dev)
+    pprint(dev)
     for serv in find_service(address = dev):
         pprint(serv)
 
