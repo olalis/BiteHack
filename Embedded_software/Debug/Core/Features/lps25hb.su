@@ -1,0 +1,5 @@
+../Core/Features/lps25hb.c:30:6:Lps25hb_Init	8	static
+../Core/Features/lps25hb.c:36:6:Lps25hb_Read	40	static
+../Core/Features/lps25hb.c:48:6:Lps25hb_SetCalib	16	static
+../Core/Features/lps25hb.c:55:16:Lps25hb_ReadReg	40	static
+../Core/Features/lps25hb.c:64:6:Lps25hb_WriteReg	32	static

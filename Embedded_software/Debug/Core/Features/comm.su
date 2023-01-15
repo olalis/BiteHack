@@ -1,0 +1,2 @@
+../Core/Features/comm.c:5:19:Comm_SendStr	16	static
+../Core/Features/comm.c:11:19:Comm_SendBytes	16	static
