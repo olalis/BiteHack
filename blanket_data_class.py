@@ -203,7 +203,8 @@ while 1:
                     if blanket_data_counter == blanket_data_counter_resetter:
                         blanket_data_counter = 0
                         data.transmit_debug_data()
-
+                    else:
+                        blanket_data_counter += 1
 
             else:
                 print("Error!!!!!!")
