@@ -184,7 +184,7 @@ data = BlanketData(bott)
 blanket_data_counter = 0
 blanket_data_counter_resetter = 10
 
-debug_mode = True
+#debug_mode = True
 
 while 1:
     with serial.Serial('/dev/ttyACM0', 115200, timeout = None) as ser:
@@ -199,7 +199,7 @@ while 1:
                 if temp_write_sg is not None:
                     ser.write(data.get_serial_signal_to_send())
 
-                if debug_mode:
+                if bott.debug_mode:
                     if blanket_data_counter == blanket_data_counter_resetter:
                         blanket_data_counter = 0
                         data.transmit_debug_data()

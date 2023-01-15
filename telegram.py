@@ -11,6 +11,8 @@ class Telegram:
         self.initialised = False
         self.bot_id = 5981943769
 
+        self.debug_mode = False
+
         print(self.bot.getMe())
 
         self.targeted_reciever = recievers
@@ -29,6 +31,12 @@ class Telegram:
         elif(actual_message == '/deinit'):
             self.bot.sendMessage(msg['from']['id'], 'communication deinitialised!')
             self.initialised = False
+        elif(actual_message == '/debug_on'):
+            self.bot.sendMessage(msg['from']['id'], 'communication deinitialised!')
+            self.debug_mode = True
+        elif(actual_message == '/debug_off'):
+            self.bot.sendMessage(msg['from']['id'], 'communication deinitialised!')
+            self.debug_mode = False
         else:
             self.bot.sendMessage(msg['from']['id'], 'Unknown command!')
 
