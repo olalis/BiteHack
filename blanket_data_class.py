@@ -63,9 +63,13 @@ class BlanketData:
 
         self.telebot = telegram_bot
 
+        self.signal_2_send = None
+
         #####
         self.hight_above_sea_level: float = None
 
+    def get_serial_signal_to_send(self):
+        return self.signal_2_send
         
     def update_data(self,blanket_data_list):
         self.thermometr1: float = blanket_data_list[0]
@@ -77,7 +81,7 @@ class BlanketData:
         self.pulse.add_new_data(blanket_data_list[6])
 
     def proces_data(frame_data):
-        self.telebot
+        pass
 
         #return [temp1, temp2, temp3, bar, hum, pulse, help]
 
@@ -97,7 +101,7 @@ class BlanketData:
         return text
     
     def process_temperature(self):
-        pass
+        self.signal_2_send = 1
 
     def process_presure(self, data):
         ACTUAL_TEMP = self.thermometr3 # 27.1
@@ -112,7 +116,7 @@ class BlanketData:
     def emit_help_me_signal(self):
         if self.help_me_button:
             if self.telebot is not None:
-                self.msg_all('POMOCY KURWA!')
+                self.telebot.msg_all('POMOCY!!!!111OneOne')
             #włącz ledy i buzzer 
 
 
@@ -123,6 +127,9 @@ class BlanketData:
         treshold_pulse: float = 0
         treshold_temperature: float = 0
         ####################
+        
+        if self.help_me_button:
+            emit_help_me_signal()
 
         if self.barometer >= treshold_barometer:
             pass
@@ -166,6 +173,9 @@ while 1:
             if x[0:4] == b'\xaa\xaa\xaa\xaa':
                 data = BlanketData(processData(x))
                 print(data)
+                data.detect_degner()
+                ser.write(data.get_serial_signal_to_send())
+
             else:
                 print("Error!!!!!!")
 
