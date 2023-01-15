@@ -37,10 +37,12 @@ class Telegram:
         for ID in self.targeted_reciever:
             self.bot.sendMessage(ID, message)
 
-bott = Telegram()
-bott.msg_all('Service starting after system restart!\n For help type: /help')
+    
 
-while True:
-    time.sleep(1)
-    if bott.initialised:
-        bott.msg_all("test_message")
+# bott = Telegram()
+# bott.msg_all('Service starting after system restart!\n For help type: /help')
+
+# while True:
+#     time.sleep(1)
+#     if bott.initialised:
+#         bott.msg_all("test_message")

@@ -6,11 +6,14 @@ import numpy as np
 import csv
 from typing import List
 
+from telegram import Telegram
+
 class ADCdata:
     def __init__(self) -> None:
         self.ADC_data_counter: int = 0 # max 15 cykli
         self.ADC_data_list: List[float] = []
         self.pulse: float = None
+        
 
     def add_new_data(self, new_data: List[float]):
         if self.ADC_data_counter <= 15:
@@ -38,7 +41,7 @@ class ADCdata:
 
 
 class BlanketData:
-    def __init__(self) -> None:
+    def __init__(self, telegram_bot = None) -> None:
         # temp_blanket_data_list: list[float, bool] = self.proces_data(data_frame)
 
         # self.thermometr1: float = blanket_data_list[0]
@@ -57,6 +60,8 @@ class BlanketData:
         self.help_me_button: bool = None
         self.pulse: ADCdata = ADCdata()
 
+        self.telebot = telegram_bot
+
         
     def update_data(self,blanket_data_list):
         self.thermometr1: float = blanket_data_list[0]
@@ -68,7 +73,7 @@ class BlanketData:
         self.pulse.add_new_data(blanket_data_list[6])
 
     def proces_data(frame_data):
-        pass
+        self.telebot
 
         #return [temp1, temp2, temp3, bar, hum, pulse, help]
 
@@ -91,7 +96,8 @@ class BlanketData:
 
     def emit_help_me_signal(self):
         if self.help_me_button:
-            pass
+            if self.telebot is not None:
+                self.msg_all('POMOCY KURWA!')
             #włącz ledy i buzzer 
 
 
@@ -132,6 +138,10 @@ def processData(val: bytes) -> list:
         temp_blanket_data_list.append(temp_ADC_data_list)
 
     return temp_blanket_data_list
+
+
+bott = Telegram()
+bott.msg_all('Service starting after system restart!\n For help type: /help')
 
 while 1:
     with serial.Serial('/dev/ttyACM0', 115200, timeout = None) as ser:
