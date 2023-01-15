@@ -129,16 +129,16 @@ class BlanketData:
         ####################
         
         if self.help_me_button:
-            emit_help_me_signal()
+            self.emit_help_me_signal()
 
         if self.barometer >= treshold_barometer:
             pass
 
         if self.air_humidity >= treshold_air_humadity:
             pass
-
-        if self.pulse >= treshold_pulse:
-            pass
+        #if self.pulse is not None:
+        #    if self.pulse.pulse >= treshold_pulse:
+        #       pass
 
 
 
@@ -176,7 +176,9 @@ while 1:
                 data.update_data(processData(x))
                 print(data)
                 data.detect_degner()
-                ser.write(data.get_serial_signal_to_send())
+                temp_write_sg = data.get_serial_signal_to_send()
+                if temp_write_sg is not None:
+                    ser.write(data.get_serial_signal_to_send())
 
             else:
                 print("Error!!!!!!")
