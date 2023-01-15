@@ -32,10 +32,10 @@ class Telegram:
             self.bot.sendMessage(msg['from']['id'], 'communication deinitialised!')
             self.initialised = False
         elif(actual_message == '/debug_on'):
-            self.bot.sendMessage(msg['from']['id'], 'communication deinitialised!')
+            self.bot.sendMessage(msg['from']['id'], 'debug mode started!')
             self.debug_mode = True
         elif(actual_message == '/debug_off'):
-            self.bot.sendMessage(msg['from']['id'], 'communication deinitialised!')
+            self.bot.sendMessage(msg['from']['id'], 'debug mode deactivated!')
             self.debug_mode = False
         else:
             self.bot.sendMessage(msg['from']['id'], 'Unknown command!')

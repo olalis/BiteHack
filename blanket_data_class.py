@@ -146,11 +146,11 @@ class BlanketData:
        #     pass
     
     def transmit_debug_data(self):
-        self.telebot.msg_all(f'''termometr 1: {self.thermometr1}\n
-                                 termometr 2: {self.thermometr2}\n
-                                 termometr 3: {self.thermometr3}\n
-                                 barometr: {self.barometer}\n
-                                 wilgotność: {self.air_humidity}\n''')
+        self.telebot.msg_all(f'''termometr 1: {self.thermometr1}\n\r
+                                 termometr 2: {self.thermometr2}\n\r
+                                 termometr 3: {self.thermometr3}\n\r
+                                 barometr: {self.barometer}\n\r
+                                 wilgotność: {self.air_humidity}\n\r''')
         
 
 
