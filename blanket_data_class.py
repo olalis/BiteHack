@@ -136,9 +136,23 @@ class BlanketData:
 
         if self.air_humidity >= treshold_air_humadity:
             pass
+
         #if self.pulse is not None:
         #    if self.pulse.pulse >= treshold_pulse:
         #       pass
+
+
+       # if self.pulse >= treshold_pulse:
+       #     pass
+    
+    def transmit_debug_data(self):
+        self.telebot.msg_all(f'''termometr 1: {self.thermometr1}\n
+                                 termometr 2: {self.thermometr2}\n
+                                 termometr 3: {self.thermometr3}\n
+                                 barometr: {self.barometer}\n
+                                 wilgotność: {self.air_humidity}\n''')
+        
+
 
 
 
@@ -167,6 +181,11 @@ bott = Telegram()
 bott.msg_all('Service starting after system restart!\n For help type: /help')
 data = BlanketData(bott)
 
+blanket_data_counter = 0
+blanket_data_counter_resetter = 10
+
+debug_mode = True
+
 while 1:
     with serial.Serial('/dev/ttyACM0', 115200, timeout = None) as ser:
         try: 
@@ -179,6 +198,12 @@ while 1:
                 temp_write_sg = data.get_serial_signal_to_send()
                 if temp_write_sg is not None:
                     ser.write(data.get_serial_signal_to_send())
+
+                if debug_mode:
+                    if blanket_data_counter == blanket_data_counter_resetter:
+                        blanket_data_counter = 0
+                        data.transmit_debug_data()
+
 
             else:
                 print("Error!!!!!!")
