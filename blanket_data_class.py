@@ -96,7 +96,7 @@ class BlanketData:
             text += f"Puls:       {self.pulse}"
         text += f"HelpMe:     {self.help_me_button}\n"
         text += f"========================="
-        test += f"Wysokość:   {self.hight_above_sea_level}\n"
+        text += f"Wysokość:   {self.hight_above_sea_level}\n"
 
         return text
     
@@ -154,8 +154,9 @@ def processData(val: bytes) -> list:
         temp_blanket_data_list.append(struct.unpack('>B', val[24:23:-1])[0]) #helpMe
         
         temp_ADC_data_list = []
-        for i in range(0,1200,4):
-            temp_ADC_data_list.append(struct.unpack('>f', val[28+i:24+1])[0]) #ADC
+        for i in range(0,400,2):
+            print(val[28:24:-1])
+            temp_ADC_data_list.append(struct.unpack('>H', val[26+i:24+i:-1])[0]) #ADC
         
         temp_blanket_data_list.append(temp_ADC_data_list)
 
@@ -164,20 +165,22 @@ def processData(val: bytes) -> list:
 
 bott = Telegram()
 bott.msg_all('Service starting after system restart!\n For help type: /help')
+data = BlanketData(bott)
 
 while 1:
     with serial.Serial('/dev/ttyACM0', 115200, timeout = None) as ser:
         try: 
-            x = ser.read(25)
-            # print(str(x))
+            x = ser.read(425)
+            print(str(x))
             if x[0:4] == b'\xaa\xaa\xaa\xaa':
-                data = BlanketData(processData(x))
+                data.update_data(processData(x))
                 print(data)
                 data.detect_degner()
                 ser.write(data.get_serial_signal_to_send())
 
             else:
                 print("Error!!!!!!")
-
+                print(x[0:4])
+                print("koniec errora")
         except serial.SerialException:
             pass
