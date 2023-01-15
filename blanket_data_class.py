@@ -37,7 +37,7 @@ class ADCdata:
         yf = fft(self.ADC_data_list)
         xf = fftfreq(N, T)[:N//2]*6
 
-        new_yf = yf[500:2000]
+        new_yf = yf[500:2001]
         self.pulse = xf[new_yf.argmax(axis=0) + 500]
 
 
@@ -79,6 +79,7 @@ class BlanketData:
         self.air_humidity: float = blanket_data_list[4]
         self.help_me_button: bool = blanket_data_list[5]
         self.pulse.add_new_data(blanket_data_list[6])
+        self.process_presure()
 
     def proces_data(frame_data):
         pass
@@ -93,7 +94,7 @@ class BlanketData:
         text += f"Barometr:   {self.barometer}\n"
         text += f"Wilgotność: {self.air_humidity}\n"
         if self.pulse.pulse is not None:
-            text += f"Puls:       {self.pulse}"
+            text += f"Puls:       {self.pulse.pulse}\n"
         text += f"HelpMe:     {self.help_me_button}\n"
         text += f"========================="
         text += f"Wysokość:   {self.hight_above_sea_level}\n"
@@ -101,9 +102,10 @@ class BlanketData:
         return text
     
     def process_temperature(self):
-        self.signal_2_send = 1
+        pass
+        #self.signal_2_send = 1
 
-    def process_presure(self, data):
+    def process_presure(self):
         ACTUAL_TEMP = self.thermometr3 # 27.1
         ACTUAL_PRES = self.barometer #990.0
 
@@ -146,11 +148,12 @@ class BlanketData:
        #     pass
     
     def transmit_debug_data(self):
-        self.telebot.msg_all(f'''termometr 1: {self.thermometr1}\n\r
-                                 termometr 2: {self.thermometr2}\n\r
-                                 termometr 3: {self.thermometr3}\n\r
-                                 barometr: {self.barometer}\n\r
-                                 wilgotność: {self.air_humidity}\n\r''')
+        # self.telebot.msg_all(f'''termometr 1: {self.thermometr1}\n\r
+        #                          termometr 2: {self.thermometr2}\n\r
+        #                          termometr 3: {self.thermometr3}\n\r
+        #                          barometr: {self.barometer}\n\r
+        #                          wilgotność: {self.air_humidity}\n\r''')
+        self.telebot.msg_all(str(self))
         
 
 
