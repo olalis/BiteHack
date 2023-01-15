@@ -22,7 +22,7 @@ class ADCdata:
             self.ADC_data_counter += 1
 
             if self.ADC_data_counter == 15:
-                self.calculate_pulse
+                self.calculate_pulse()
                 self.ADC_data_counter = 0
                 self.ADC_data_list = []
     
